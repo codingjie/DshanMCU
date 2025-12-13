@@ -20,7 +20,7 @@ mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 # 运行CMake配置和编译项目
-cmake .. -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../cmake/gcc-arm-none-eabi.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/gcc-arm-none-eabi.cmake
 make -j4
 
 # 根据项目名称生成ELF、BIN和HEX文件路径
