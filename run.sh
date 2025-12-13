@@ -6,6 +6,11 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 # 从当前目录开始，向上查找直到找到CMakeLists.txt文件，确定项目根目录
 PROJECT_DIR=$SCRIPT_DIR
 while [ ! -f "$PROJECT_DIR/CMakeLists.txt" ]; do
+    # 检查是否到达系统根目录
+    if [ "$PROJECT_DIR" = "/" ]; then
+        echo "Error: CMakeLists.txt not found in any parent directory."
+        exit 1
+    fi
     PROJECT_DIR=$(dirname "$PROJECT_DIR")
 done
 
@@ -40,20 +45,19 @@ else
     exit 1
 fi
 
-# 将HEX文件路径转换为Windows格式
-HEX_FILE=$(cygpath -w "$HEX_FILE" | sed 's/\\/\//g')
+# ----------------------------------------------------------------------
+# 关键删除：在 Linux/Ubuntu 上不需要进行 Windows 路径转换
+# HEX_FILE=$(cygpath -w "$HEX_FILE" | sed 's/\\/\//g') 
+# ----------------------------------------------------------------------
 
-# 执行OpenOCD进行烧录，如果发现烧录后执行了两次可以取消-c "reset run"
-# openocd -f interface/cmsis-dap.cfg -f target/stm32f1x.cfg -c "program $HEX_FILE verify reset" -c "reset run" -c "exit"
-
-# 前者依赖硬件nRESET引脚执行reset halt，而后者通过SWD halt + reset run绕过了对nRESET的依赖，所以能成功
+# 执行OpenOCD进行烧录
 openocd \
-	-f interface/cmsis-dap.cfg \
-	-f target/stm32f1x.cfg \
-	-c "adapter speed 1000" \
-	-c "init" \
-	-c "reset_config none" \
-	-c "halt" \
-	-c "program $HEX_FILE verify" \
-	-c "reset run" \
-	-c "exit"
+    -f interface/cmsis-dap.cfg \
+    -f target/stm32f1x.cfg \
+    -c "adapter speed 1000" \
+    -c "init" \
+    -c "reset_config none" \
+    -c "halt" \
+    -c "program $HEX_FILE verify" \
+    -c "reset run" \
+    -c "exit"
