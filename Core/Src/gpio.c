@@ -63,6 +63,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : LIGHT_DO_Pin */
+  GPIO_InitStruct.Pin = LIGHT_DO_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LIGHT_DO_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : RGB_B_Pin */
   GPIO_InitStruct.Pin = RGB_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
