@@ -54,6 +54,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/LED
     ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/LightSensor
+    ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/KEY
 )
 
 # Add project symbols (macros)

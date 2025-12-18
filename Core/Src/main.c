@@ -103,21 +103,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   uint8_t a = 0;
   uint8_t b = 0;
-  LED_White_On();
+  LED_Off();
   while (1)
   {
     a = LightSensor_ReadDO();
     b = LightSensor_ReadAO();
     printf("DO: %d, AO: %d\r\n", a, b);
     HAL_Delay(500);
-    if (a == 1) {
-      LED_Off();
-      LED_Green_On();
-    }
-    else {
-      LED_Off();
-      LED_Red_On();
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
