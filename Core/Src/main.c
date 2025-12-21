@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -95,6 +96,7 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -103,13 +105,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   uint8_t a = 0;
   uint8_t b = 0;
+  uint8_t c = 0;
   LED_Off();
   while (1)
   {
     a = LightSensor_ReadDO();
     b = LightSensor_ReadAO();
-    printf("DO: %d, AO: %d\r\n", a, b);
-    HAL_Delay(500);
+    c = LightSensor_Percentage();
+    printf("DO: %d, AO: %d, Percentage: %d\r\n", a, b, c);
+    HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

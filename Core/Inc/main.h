@@ -70,6 +70,10 @@ void Error_Handler(void);
 #define RGB_G_GPIO_Port GPIOA
 #define RGB_B_Pin GPIO_PIN_3
 #define RGB_B_GPIO_Port GPIOB
+#define OLED_SCL_Pin GPIO_PIN_6
+#define OLED_SCL_GPIO_Port GPIOB
+#define OLED_SDA_Pin GPIO_PIN_7
+#define OLED_SDA_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

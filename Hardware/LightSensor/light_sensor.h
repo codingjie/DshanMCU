@@ -4,6 +4,7 @@
 #include "main.h"
 
 uint8_t LightSensor_ReadDO(void);
-uint8_t LightSensor_ReadAO(void);
+uint16_t LightSensor_ReadAO(void);
+uint8_t LightSensor_Percentage(void);
 
 #endif
