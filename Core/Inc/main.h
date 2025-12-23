@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DHT11_IO_Pin GPIO_PIN_1
+#define DHT11_IO_GPIO_Port GPIOA
 #define RGB_R_Pin GPIO_PIN_2
 #define RGB_R_GPIO_Port GPIOA
 #define LIGHT_AO_Pin GPIO_PIN_3
