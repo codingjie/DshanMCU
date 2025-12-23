@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include "led.h"
 #include "light_sensor.h"
+#include "oled.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,7 +99,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  OLED_Init();
+  OLED_Clear();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,7 +108,15 @@ int main(void)
   uint8_t a = 0;
   uint8_t b = 0;
   uint8_t c = 0;
-  LED_Off();
+  OLED_Clear();
+  HAL_Delay(3000);
+  OLED_Fill();
+  HAL_Delay(3000);
+  OLED_Clear();
+  OLED_ShowChar(0, 0, 'H', 16);
+  OLED_ShowString(0, 2, "Light Sensor", 16);
+  OLED_ShowNum(0, 4, 1234, 4, 16);
+  OLED_ShowChinese(0, 6, 0);
   while (1)
   {
     a = LightSensor_ReadDO();
