@@ -29,6 +29,8 @@
 #include "led.h"
 #include "light_sensor.h"
 #include "oled.h"
+#include "dht11.h"
+#include "obstacle.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,6 +103,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   OLED_Init();
   OLED_Clear();
+  DHT11_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,22 +111,26 @@ int main(void)
   uint8_t a = 0;
   uint8_t b = 0;
   uint8_t c = 0;
-  OLED_Clear();
-  HAL_Delay(3000);
-  OLED_Fill();
-  HAL_Delay(3000);
-  OLED_Clear();
-  OLED_ShowChar(0, 0, 'H', 16);
-  OLED_ShowString(0, 2, "Light Sensor", 16);
-  OLED_ShowNum(0, 4, 1234, 4, 16);
-  OLED_ShowChinese(0, 6, 0);
-  while (1)
-  {
-    a = LightSensor_ReadDO();
-    b = LightSensor_ReadAO();
-    c = LightSensor_Percentage();
-    printf("DO: %d, AO: %d, Percentage: %d\r\n", a, b, c);
-    HAL_Delay(1000);
+
+  DHT11_Data dht;
+  while (1) {
+    // if (DHT11_ReadData(&dht) == 0) {
+    //   float temp = dht.temperature_int + dht.temperature_dec * 0.1f;
+    //   float humi = dht.humidity_int + dht.humidity_dec * 0.1f;
+    //   OLED_ShowFloat(0, 0, temp, 3, 1, 16); // 显示温度，整数部分3位，小数部分1位
+    //   OLED_ShowFloat(0, 2, humi, 3, 1, 16); // 显示湿度，整数部分3位，小数部分1位
+    // }
+    // else {
+    //   OLED_Clear();
+    // }
+    if (Obstacle_Detected()) {
+      LED_Red_Off();
+    }
+    else {
+      LED_Red_On();
+    }
+    // printf("DO: %d, AO: %d, Percentage: %d\r\n", a, b, c);
+    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

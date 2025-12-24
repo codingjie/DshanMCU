@@ -56,6 +56,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/LightSensor
     ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/KEY
     ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/OLED
+    ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/DHT11
+    ${CMAKE_CURRENT_SOURCE_DIR}/Hardware/IR_Obstacle
 )
 
 # Add project symbols (macros)

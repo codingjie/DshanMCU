@@ -141,6 +141,49 @@ void OLED_ShowNum(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size)
 }
 
 /**
+* @brief 显示浮点数
+* @param x: x轴起点坐标
+* @param y: y轴起点坐标
+* @param num: 浮点数
+* @param intLen: 整数部分位数
+* @param decLen: 小数部分位数
+* @param size: 字体大小
+* @retval None
+*/
+void OLED_ShowFloat(uint8_t x, uint8_t y, float num, uint8_t intLen, uint8_t decLen, uint8_t size) {
+    uint32_t intPart, decPart;
+    uint8_t width = size / 2;
+    // 处理负数
+    if (num < 0) {
+        OLED_ShowChar(x, y, '-', size);
+        x += width;
+        num = -num;
+    }
+    intPart = (uint32_t) num; // 获取整数部分
+    // 计算小数部分
+    float decTemp = num - intPart;
+    for (uint8_t i = 0; i < decLen; i++) {
+        decTemp *= 10;
+    }
+    decPart = (uint32_t)(decTemp + 0.5f); // 四舍五入获取小数部分
+    // 显示整数部分
+    OLED_ShowNum(x, y, intPart, intLen, size);
+    x += width * intLen;
+    // 显示小数点
+    OLED_ShowChar(x, y, '.', size);
+    x += width;
+    // 显示小数部分（含前导零）
+    uint32_t pow = 1;
+    for (uint8_t i = 0; i < decLen - 1; i++) {
+        pow *= 10;
+    }
+    for (uint8_t i = 0; i < decLen; i++) {
+        OLED_ShowChar(x + width * i, y, (decPart / pow) % 10 + '0', size);
+        pow /= 10;
+    }
+}
+
+/**
 * @brief 显示汉字
 * @param x: x轴起点坐标
 * @param y: y轴起点坐标
