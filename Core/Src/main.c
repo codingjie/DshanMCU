@@ -108,28 +108,18 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t a = 0;
-  uint8_t b = 0;
-  uint8_t c = 0;
 
   DHT11_Data dht;
   while (1) {
-    // if (DHT11_ReadData(&dht) == 0) {
-    //   float temp = dht.temperature_int + dht.temperature_dec * 0.1f;
-    //   float humi = dht.humidity_int + dht.humidity_dec * 0.1f;
-    //   OLED_ShowFloat(0, 0, temp, 3, 1, 16); // 显示温度，整数部分3位，小数部分1位
-    //   OLED_ShowFloat(0, 2, humi, 3, 1, 16); // 显示湿度，整数部分3位，小数部分1位
-    // }
-    // else {
-    //   OLED_Clear();
-    // }
-    if (Obstacle_Detected()) {
-      LED_Red_Off();
+    if (DHT11_ReadData(&dht) == 0) {
+      // float temp = dht.temperature_int + dht.temperature_dec * 0.1f;
+      // float humi = dht.humidity_int + dht.humidity_dec * 0.1f;
+      // OLED_ShowFloat(0, 0, temp, 3, 1, 16); // 显示温度，整数部分3位，小数部分1位
+      // OLED_ShowFloat(0, 2, humi, 3, 1, 16); // 显示湿度，整数部分3位，小数部分1位
     }
     else {
-      LED_Red_On();
+      // OLED_Clear();
     }
-    // printf("DO: %d, AO: %d, Percentage: %d\r\n", a, b, c);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
