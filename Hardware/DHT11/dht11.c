@@ -1,31 +1,31 @@
 #include "dht11.h"
 
-// DWT初始化
-static void DWT_Init(void) {
-    CoreDebug -> DEMCR |= CoreDebug_DEMCR_TRCENA_Msk; // Enable DWT
-    DWT -> CYCCNT = 0; // Reset the cycle counter
-    DWT -> CTRL |= DWT_CTRL_CYCCNTENA_Msk; // Enable the cycle counter
-}
+// // 设置为输出模式 (推挽输出, 50MHz)
+// static void DHT11_SetOutput(void) {
+//     DHT11_GPIO_Port->CRL &= ~(0xF << (DHT11_PIN_NUM * 4));
+//     DHT11_GPIO_Port->CRL |=  (0x3 << (DHT11_PIN_NUM * 4));
+// }
 
-// 微妙延时
-static void Delay_us(uint32_t us) {
-    uint32_t start = DWT -> CYCCNT;
-    uint32_t ticks = us * (SystemCoreClock / 1000000);
-    while((DWT -> CYCCNT - start) < ticks);
-}
+// // 设置为输入模式 (上拉/下拉输入)
+// static void DHT11_SetInput(void) {
+//     DHT11_GPIO_Port->CRL &= ~(0xF << (DHT11_PIN_NUM * 4));
+//     DHT11_GPIO_Port->CRL |=  (0x8 << (DHT11_PIN_NUM * 4));
+// }
 
-// 设置为输出模式
 static void DHT11_SetOutput(void) {
-    // CNF=00(推挽), MODE=11(50MHz输出)
-    DHT11_GPIO_Port->CRL &= ~(0xF << (DHT11_PIN_NUM * 4));
-    DHT11_GPIO_Port->CRL |= (0x3 << (DHT11_PIN_NUM * 4));
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = DHT11_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStruct);
 }
 
-// 设置为输入模式
 static void DHT11_SetInput(void) {
-    // CNF=10(上拉/下拉输入), MODE=00(输入)
-    DHT11_GPIO_Port->CRL &= ~(0xF << (DHT11_PIN_NUM * 4));
-    DHT11_GPIO_Port->CRL |= (0x8 << (DHT11_PIN_NUM * 4));
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = DHT11_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL; // 或 GPIO_PULLUP
+    HAL_GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStruct);
 }
 
 // 读取一个字节
@@ -35,27 +35,21 @@ static uint8_t DHT11_ReadByte(void) {
     for (uint8_t i = 0; i < 8; i++) {
         retry = 0;
         while(!DHT11_READ() && retry < 100) { // 等待低电平结束
-            Delay_us(1);
+            delay_us(1);
             retry++;
         }
-        Delay_us(40); // 延时40us
+        delay_us(40); // 延时40us
         data <<= 1;
         if(DHT11_READ()) { // 如果是高电平
             data |= 1; // 记录为1
         }
         retry = 0;
         while(DHT11_READ() && retry < 100) { // 等待高电平结束
-            Delay_us(1);
+            delay_us(1);
             retry++;    
         }
     }
     return data;
-}
-
-void DHT11_Init(void) {
-    DWT_Init();
-    DHT11_HIGH();
-    HAL_Delay(1000); // 等待传感器稳定
 }
 
 // 读取数据
@@ -65,9 +59,9 @@ uint8_t DHT11_ReadData(DHT11_Data *data) {
     // 主机起始信号
     DHT11_SetOutput();
     DHT11_LOW();
-    HAL_Delay(20); // 拉低至少18ms
+    delay_ms(20); // 拉低至少18ms
     DHT11_HIGH();
-    Delay_us(30); // 拉高20-40us
+    delay_us(30); // 拉高20-40us
     // 切换输入模式
     DHT11_SetInput();
     // 检测DHT11响应
@@ -77,7 +71,7 @@ uint8_t DHT11_ReadData(DHT11_Data *data) {
     // 等待80us低电平
     retry = 0;
     while(!DHT11_READ() && retry < 100) { // 等待DHT11拉低
-        Delay_us(1);
+        delay_us(1);
         retry++;
     }
     if (retry >= 100) {
@@ -86,7 +80,7 @@ uint8_t DHT11_ReadData(DHT11_Data *data) {
     // 等待80us高电平
     retry = 0;
     while(DHT11_READ() && retry < 100) { // 等待DHT11拉高
-        Delay_us(1);
+        delay_us(1);
         retry++;
     }
     if (retry >= 100) {

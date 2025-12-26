@@ -31,6 +31,7 @@
 #include "oled.h"
 #include "dht11.h"
 #include "obstacle.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,25 +102,25 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  delay_init();
   OLED_Init();
   OLED_Clear();
-  DHT11_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
   DHT11_Data dht;
   while (1) {
-    if (DHT11_ReadData(&dht) == 0) {
-      // float temp = dht.temperature_int + dht.temperature_dec * 0.1f;
-      // float humi = dht.humidity_int + dht.humidity_dec * 0.1f;
-      // OLED_ShowFloat(0, 0, temp, 3, 1, 16); // 显示温度，整数部分3位，小数部分1位
-      // OLED_ShowFloat(0, 2, humi, 3, 1, 16); // 显示湿度，整数部分3位，小数部分1位
-    }
-    else {
-      // OLED_Clear();
-    }
+    // if (DHT11_ReadData(&dht) == 0) {
+    //   float temp = dht.temperature_int + dht.temperature_dec * 0.1f;
+    //   float humi = dht.humidity_int + dht.humidity_dec * 0.1f;
+    //   OLED_ShowFloat(0, 0, temp, 3, 1, 16); // 显示温度，整数部分3位，小数部分1位
+    //   OLED_ShowFloat(0, 2, humi, 3, 1, 16); // 显示湿度，整数部分3位，小数部分1位
+    // }
+    // else {
+    //   OLED_ShowNum(0, 0, DHT11_ReadData(&dht), 2, 16);;
+    // }
+    DHT11_ReadData(&dht);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 

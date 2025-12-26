@@ -1,0 +1,51 @@
+#ifndef __SYS_H
+#define __SYS_H
+
+#include <stdint.h>
+
+// 位带操作宏
+#define BITBAND(addr, bitnum) ((addr & 0xF0000000) + 0x2000000 + ((addr & 0xFFFFF) << 5) + ((bitnum) << 2))
+#define MEM_ADDR(addr)  *((volatile uint32_t *)(addr))
+#define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum))
+
+// GPIO端口基地址 (STM32F103C8T6)
+#define GPIOA_BASE_ADDR 0x40010800
+#define GPIOB_BASE_ADDR 0x40010C00
+#define GPIOC_BASE_ADDR 0x40011000
+#define GPIOD_BASE_ADDR 0x40011400
+#define GPIOE_BASE_ADDR 0x40011800
+
+// ODR/IDR寄存器偏移
+#define GPIO_ODR_OFFSET 0x0C
+#define GPIO_IDR_OFFSET 0x08
+
+// ODR/IDR地址
+#define GPIOA_ODR_ADDR (GPIOA_BASE_ADDR + GPIO_ODR_OFFSET)
+#define GPIOB_ODR_ADDR (GPIOB_BASE_ADDR + GPIO_ODR_OFFSET)
+#define GPIOC_ODR_ADDR (GPIOC_BASE_ADDR + GPIO_ODR_OFFSET)
+#define GPIOD_ODR_ADDR (GPIOD_BASE_ADDR + GPIO_ODR_OFFSET)
+#define GPIOE_ODR_ADDR (GPIOE_BASE_ADDR + GPIO_ODR_OFFSET)
+
+#define GPIOA_IDR_ADDR (GPIOA_BASE_ADDR + GPIO_IDR_OFFSET)
+#define GPIOB_IDR_ADDR (GPIOB_BASE_ADDR + GPIO_IDR_OFFSET)
+#define GPIOC_IDR_ADDR (GPIOC_BASE_ADDR + GPIO_IDR_OFFSET)
+#define GPIOD_IDR_ADDR (GPIOD_BASE_ADDR + GPIO_IDR_OFFSET)
+#define GPIOE_IDR_ADDR (GPIOE_BASE_ADDR + GPIO_IDR_OFFSET)
+
+// 单片机IO操作宏，n: 0~15
+#define PAout(n) BIT_ADDR(GPIOA_ODR_ADDR, n)
+#define PAin(n)  BIT_ADDR(GPIOA_IDR_ADDR, n)
+
+#define PBout(n) BIT_ADDR(GPIOB_ODR_ADDR, n)
+#define PBin(n)  BIT_ADDR(GPIOB_IDR_ADDR, n)
+
+#define PCout(n) BIT_ADDR(GPIOC_ODR_ADDR, n)
+#define PCin(n)  BIT_ADDR(GPIOC_IDR_ADDR, n)
+
+#define PDout(n) BIT_ADDR(GPIOD_ODR_ADDR, n)
+#define PDin(n)  BIT_ADDR(GPIOD_IDR_ADDR, n)
+
+#define PEout(n) BIT_ADDR(GPIOE_ODR_ADDR, n)
+#define PEin(n)  BIT_ADDR(GPIOE_IDR_ADDR, n)
+
+#endif
